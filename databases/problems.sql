@@ -99,3 +99,73 @@ select * from classes cl
 left join ships sh on cl.class = sh.class
 left join outcomes o on sh.name = o.ship
 where o.battle is null;
+
+-- Напишете заявка, която извежда средната цена на компютрите произведени от
+-- производител ‘A’
+select avg(p.price), pr.maker
+from pc p
+inner join product pr on pr.model = p.model
+where pr.maker like '%A%'
+group by pr.maker;
+
+
+-- Напишете заявка, която извежда средната цена на компютрите и лаптопите за
+-- производител ‘B’
+select avg(t.price) from (select price from laptop union select price from pc) t;
+
+-- Напишете заявка, която извежда средната цена на компютрите според различните им честоти
+select avg(g.price), g.speed from pc g group by speed;
+
+--Напишете заявка, която извежда производителите, които са произвели поне по 2
+-- различни модела компютъра
+select pr.maker, count(p.model) 'count of computers'
+from product pr
+left join pc p on pr.model = p.model
+group by pr.maker
+having count(p.model) > 2;
+
+-- Напишете заявка, която извежда производителите на компютрите с най-висока цена
+select pr.maker from product pr left join pc p on p.model = pr.model where p.price = (select max(p.price) from pc p);
+
+-- Напишете заявка, която извежда средната цена на компютрите за всяка честота по-голяма от 800
+select avg(p.price), p.speed from pc p where p.speed > 200 group by speed;
+
+-- Напишете заявка, която извежда средния размер на диска на тези компютри произведени от производители, които произвеждат и принтери
+select avg(p.hd), pr.maker
+from pc p
+left join product pr on p.model = pr.model
+left join printer h on pr.model = h.model
+where h.model is not null
+group by pr.maker;
+
+-- Напишете заявка, която за всеки размер на лаптоп намира разликата в цената на най-скъпия и най-евтиния лаптоп със същия размер
+select l.screen, max(l.price) - min(l.price), max(l.price) from laptop l group by l.screen;
+
+-- Напишете заявка, която извежда броя на класовете кораби
+select count(c.[class]) from classes c;
+
+-- Напишете заявка, която извежда броя на корабите потънали в битка според класа
+select count(s.name) 'sunk', c.class
+from ships s
+left join classes c on s.class = c.class
+left join outcomes o on s.name = o.ship
+where o.result like 'sunk'
+group by c.class;
+
+-- Напишете заявка, която извежда броя на корабите потънали в битка според класа, за тези класове с повече от 4 пуснати на вода кораба
+select count(s.name) 'sunk', c.class
+from ships s
+left join classes c on s.class = c.class
+left join outcomes o on s.name = o.ship
+where o.result like 'sunk'
+group by c.class
+having count(s.name) > 4;
+
+-- Напишете заявка, която извежда средното тегло на корабите, за всяка страна.
+select avg(c.displacement), c.country from classes c group by c.country;
+
+-- Напишете заявка, която извежда средния брой на оръжия за всички кораби, пуснати на вода
+select avg(c.numguns) from ships s left join classes c on c.class = s.class;
+
+-- Напишете заявка, която извежда за всеки клас първата и последната година, в която кораб от съответния клас е пуснат на вода
+select c.class, min(s.launched), max(s.launched) from classes c left join ships s on s.class = c.class group by c.class;
