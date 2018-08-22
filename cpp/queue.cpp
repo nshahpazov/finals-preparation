@@ -27,8 +27,9 @@ class queue
     int length() const;
     bool empty() const;
     T& front() const;
+    void print() const;
     void insert(const T&);
-    void remove(const T& = NULL);
+    T& remove();
     
     
 private:
@@ -119,10 +120,13 @@ void queue<T>::insert(const T& val)
 }
 
 template <typename T>
-void queue<T>::remove(const T& val)
+T& queue<T>::remove()
 {
+    if (first == NULL) {
+        throw runtime_error("The queue is empty");
+    }
     elem<T> *p = first;
-    val = p->inf;
+    T result = p->inf;
     if (p == last) {
         first = last = NULL;
         size = 0;
@@ -131,9 +135,29 @@ void queue<T>::remove(const T& val)
         size--;
     }
     delete p;
+    return result;
+}
+
+template <typename T>
+void queue<T>::print() const
+{
+    elem<T> *p = first;
+    while (p) {
+        cout << p->inf << " ";
+        p = p->link;
+    }
+    cout << endl;
 }
 
 int main()
 {
+    queue<int> *q = new queue<int>();
+    q->insert(1);
+    q->insert(2);
+    q->insert(3);
+    
+    q->print();
+    q->remove();
+    q->print();
     return 0;
 }
