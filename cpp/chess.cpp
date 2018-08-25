@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 
@@ -98,7 +99,7 @@ Knight::Knight(const Knight& knight)
     position = knight.position;
 }
 
-Knight& Knight::Knight(const Knight& knight)
+Knight& Knight::operator=(const Knight& knight)
 {
     if (this != &knight) {
         
@@ -107,8 +108,6 @@ Knight& Knight::Knight(const Knight& knight)
     return *this;
 }
 
-
-
 ChessPosition Knight::getPosition()
 {
     return position;
@@ -116,12 +115,30 @@ ChessPosition Knight::getPosition()
 
 vector<ChessPosition> Knight::allowedMoves()
 {
+    vector<ChessPosition> positions;
+    int x = position.x;
+    int y = position.y;
+    // move up-left
+    if (x >= 2 && y >= 1) {
+        ChessPosition position;
+        position.x = x-2;
+        position.y = y-1;
+        positions.push_back(position);
+    }
     
+    // analogically for the rest
+    
+    return positions;
 }
 
 bool Knight::captures(ChessPosition pos)
 {
-    return true;
+    int horizontalDistance = abs(pos.x - position.x);
+    int verticalDistance = abs(pos.y - position.y);
+    bool capturesHorizontally = horizontalDistance == 2 && verticalDistance == 1;
+    bool capturesVertically =   horizontalDistance == 1 && verticalDistance == 2;
+
+    return capturesHorizontally || capturesVertically;
 }
 
 int main()
