@@ -6,6 +6,12 @@
 
 using namespace std;
 
+/* 
+ Напишете функция, която получава като аргумент свързан списък с елементи свързани списъци от цели числа. Някои от тези списъци ще са сортирани, други не. Вашата задача е да върнете като резултат нов сортиран списък от цели числа, получен чрез сливането на всички сортирани списъци.Напишете кратка програма, която демонстрира използването на горната функция.Използвайтеезиците JAVA, C или C++, но безбиблиотечни структури данни и алгоритми.
+
+ */
+
+
 template <typename T>
 struct elem {
     T inf;
@@ -244,7 +250,7 @@ bool is_sorted(linked_list<int> list)
 {
     list.iterStart();
     elem<int> *current = list.iter();
-
+    
     while(current->link) {
         if (current->inf > current->link->inf) {
             return false;
@@ -275,3 +281,4 @@ int main()
     // some example with this shit
     return 0;
 }
+
