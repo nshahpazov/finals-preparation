@@ -215,32 +215,34 @@ int main()
     // create a polynomial
     int arr1[4] = {1, 2, 3, 4};
     Polynomial<int> *poly1 = new Polynomial<int>(4, arr1);
+    Polynomial<int> poly = *poly1;
+    
     cout << "Original Polynomial:" << endl;
-    poly1->print();
+    poly.print();
 
     // testing derivative
      cout << "Differentiated Polynomial:" << endl;
-     (*poly1)--;
-     poly1->print();
+     poly--;
+     poly.print();
     
     // testing integral
      cout << "Integrated Polynomial:" << endl;
-     (*poly1)++;
-     poly1->print();
+     poly++;
+     poly.print();
     
     // Testing Definite integral from 2 to 4
     cout << "Integrated Polynomial from 2 to 4" << endl;
-    cout << (*poly1)(2, 4) << endl;
+    cout << poly(2, 4) << endl;
     
     int arr2[3] = {7, 8, 2};
     Polynomial<int> *poly2 = new Polynomial<int>(3, arr2);
     poly2->print();
     
     // testing the predefined [] operator
-    cout << (*poly1)[2] << endl;
+    cout << poly[2] << endl;
     
     // testing the evaluation of a polynomial
-    cout << (*poly1)(2) << endl;
+    cout << poly(2) << endl;
     
     // testing +,- operator
     Polynomial<int> poly3 = *poly1 - *poly2;
@@ -249,7 +251,6 @@ int main()
     // testing ==
     bool are_equal = (*poly1) == (*poly1);
     cout << (are_equal ? "yes" : "no") << endl;
-    
     return 0;
 }
 
