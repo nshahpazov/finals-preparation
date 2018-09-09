@@ -184,6 +184,9 @@ T& Polynomial<T>::operator[](const int index)
 template <typename T>
 void Polynomial<T>::setDegree(int n)
 {
+    if (n < 0 || n > MAX_POLYNOMIAL_SIZE) {
+        throw runtime_error("Ilegal degree of polynomial");
+    }
     power = n;
 }
 
