@@ -12,25 +12,27 @@ public:
     Polynomial();
     Polynomial(int, T arr[]);
     Polynomial(const Polynomial<T>&);
-
+    
     Polynomial<T>& operator=(const Polynomial<T>&);
     bool operator==(const Polynomial<T>&);
     bool operator!=(const Polynomial<T>&);
-
+    
     T operator()(const T) const;
-
+    T operator()(const T, const T) const;
+    
     Polynomial<T> operator+(const Polynomial<T>&);
     Polynomial<T> operator-(const Polynomial<T>&);
-
+    
     Polynomial<T> operator--(int);
-
+    Polynomial<T> operator++(int);
+    
     T& operator[](const int);
-
+    
     void setDegree(int);
-
+    
     int degree() const;
     void print() const;
-
+    
 private:
     int power;
     T coefficients[MAX_POLYNOMIAL_SIZE];
@@ -103,6 +105,8 @@ T Polynomial<T>::operator()(const T x) const
     return result;
 }
 
+
+
 template <typename T>
 Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other)
 {
@@ -139,6 +143,34 @@ Polynomial<T> Polynomial<T>::operator--(int n)
     power--;
     return *this;
 }
+
+template <typename T>
+Polynomial<T> Polynomial<T>::operator++(int n)
+{
+    for (int i = power ; i >= 0 ; i--) {
+        coefficients[i] = coefficients[i - 1];
+    }
+    coefficients[0] = 0;
+    for (int i = 1; i <= power; i++) {
+        coefficients[i] /= i;
+    }
+    power++;
+
+    return *this;
+}
+
+template <typename T>
+T Polynomial<T>::operator()(const T a, const T b) const
+{
+    Polynomial<T> *poly = new Polynomial(*this);
+    Polynomial<T> indefinite = (*poly)++;
+    
+    T upper = indefinite(b);
+    T lower = indefinite(a);
+    
+    return upper - lower;
+}
+
 
 template <typename T>
 T& Polynomial<T>::operator[](const int index)
@@ -180,23 +212,35 @@ void Polynomial<T>::print() const
 
 int main()
 {
+    // create a polynomial
     int arr1[4] = {1, 2, 3, 4};
     Polynomial<int> *poly1 = new Polynomial<int>(4, arr1);
+    cout << "Original Polynomial:" << endl;
     poly1->print();
 
     // testing derivative
-    (*poly1)--;
-    poly1->print();
+     cout << "Differentiated Polynomial:" << endl;
+     (*poly1)--;
+     poly1->print();
+    
+    // testing integral
+     cout << "Integrated Polynomial:" << endl;
+     (*poly1)++;
+     poly1->print();
+    
+    // Testing Definite integral from 2 to 4
+    cout << "Integrated Polynomial from 2 to 4" << endl;
+    cout << (*poly1)(2, 4) << endl;
     
     int arr2[3] = {7, 8, 2};
     Polynomial<int> *poly2 = new Polynomial<int>(3, arr2);
     poly2->print();
-
+    
     // testing the predefined [] operator
     cout << (*poly1)[2] << endl;
     
     // testing the evaluation of a polynomial
-     cout << (*poly1)(2) << endl;
+    cout << (*poly1)(2) << endl;
     
     // testing +,- operator
     Polynomial<int> poly3 = *poly1 - *poly2;
